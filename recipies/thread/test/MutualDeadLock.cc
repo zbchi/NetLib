@@ -1,4 +1,5 @@
 #include "myhpp.h"
+#include "../../../base/Mutex.h"
 
 class Request;
 class Inventory
