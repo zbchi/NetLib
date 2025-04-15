@@ -14,7 +14,7 @@ namespace mylib
     { fwrite(msg, 1, len, stdout); };
     static Logger::FlushFunc g_flush = []()
     { fflush(stdout); };
-    Logger::LogLevel g_logLevel = Logger::INFO;
+    Logger::LogLevel g_logLevel = Logger::TRACE;
 
     __thread char t_errnobuf[512];
     __thread char t_time[32];

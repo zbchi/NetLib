@@ -1,5 +1,5 @@
 
-#include "myhpp.h"
+#include "myhpp.h" 
 typedef std::vector<Foo> FooList;
 typedef shared_ptr<FooList> FooListPtr;
 MutexLock mutex;
