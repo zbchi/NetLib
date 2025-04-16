@@ -4,7 +4,7 @@ class Channel
 {
 
 public:
-    typedef function<void> EventCallBack;
+    using EventCallBack = std::function<void()>;
     Channel(EventLoop *loop, int fd);
 
     void handleEvent();
@@ -16,7 +16,7 @@ public:
     {
         writeCallback_ = cb;
     }
-    void setErrorCallback(const EventCallback &cb)
+    void setErrorCallback(const EventCallBack &cb)
     {
         errorCallback_ = cb;
     }
@@ -31,7 +31,7 @@ public:
     }
     bool isNoneEvent() const
     {
-        return events_ = kNoneEvent;
+        return events_ == kNoneEvent;
     }
 
     void enableReading()
@@ -46,7 +46,7 @@ public:
     }
     void set_index(int idx)
     {
-        index = idx;
+        index_ = idx;
     }
     EventLoop *ownerLoop()
     {
@@ -56,9 +56,9 @@ public:
 private:
     void update();
 
-    EventCallback readCallback_;
-    EventCallback writeCallback_;
-    EventCallback errorCallback_;
+    EventCallBack readCallback_;
+    EventCallBack writeCallback_;
+    EventCallBack errorCallback_;
 
     EventLoop *loop_;
     const int fd_;
@@ -69,4 +69,4 @@ private:
     static const int kNoneEvent;
     static const int kReadEvent;
     static const int kWriteEvent;
-}
+};

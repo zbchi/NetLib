@@ -1,6 +1,10 @@
+#pragma once
 #include <thread>
 #include "CurrentThread.h"
 #include "Logger.h"
+#include <vector>
+class Poller;
+class Channel;
 class EventLoop
 {
 private:
@@ -8,6 +12,12 @@ private:
 
     bool looping_;
     const pid_t threadId_;
+
+    using ChannelList = std::vector<Channel *>;
+    bool quit_;
+
+    std::unique_ptr<mylib::Poller> poller_;
+    ChannelList activeChannels_;
 
 public:
     EventLoop();
@@ -25,4 +35,6 @@ public:
     {
         return threadId_ == mylib::CurrentThread::tid();
     }
+    void quit();
+    void updateChannel(Channel *channel);
 };
