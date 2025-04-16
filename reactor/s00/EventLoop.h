@@ -1,6 +1,6 @@
 #include <thread>
 #include "CurrentThread.h"
-#include
+#include "Logger.h"
 class EventLoop
 {
 private:
@@ -23,6 +23,6 @@ public:
 
     bool isInLoopThread() const
     {
-        return threadId_ == CurrentThread::tid();
+        return threadId_ == mylib::CurrentThread::tid();
     }
 };

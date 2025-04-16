@@ -9,6 +9,7 @@ int main()
 {
     EventLoop loop;
 
-    thread a(threadFUnc);
+    std::thread a(threadFUnc);
     loop.loop();
+    a.join();
 }

@@ -1,9 +1,11 @@
 #include "EventLoop.h"
-#include "Logger.h"
+#include <cassert>
+#include <poll.h>
+#include <cstdlib>
 __thread EventLoop *t_loopInThisThread = 0;
-EventLoop::EventLoop() : looping_(false), threadId(CurrenttThread::tid())
+EventLoop::EventLoop() : looping_(false), threadId_(mylib::CurrentThread::tid())
 {
-    LOG_TRACE("EventLoop created %p in thread %%d", this, threadId_);
+    LOG_TRACE("EventLoop created %p in thread %d", this, threadId_);
     if (t_loopInThisThread)
     {
         LOG_FATAL("Another EventLoop %p exists in this thread %d", t_loopInThisThread, threadId_);
@@ -30,4 +32,10 @@ void EventLoop::loop()
 
     LOG_TRACE("EventLoop %p stop looping", this);
     looping_ = false;
+}
+void EventLoop::abortNotInLoopThread()
+{
+    LOG_FATAL("EventLoop::abortNotInLoopThread - EventLoop %p is accessed from thread %d (owner thread: %d)",
+              this, mylib::CurrentThread::tid(), threadId_);
+    abort();
 }
