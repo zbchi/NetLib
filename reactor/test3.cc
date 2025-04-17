@@ -1,6 +1,9 @@
 #include "EventLoop.h"
+#include "Channel.h"
 #include <stdio.h>
 #include <sys/timerfd.h>
+#include <unistd.h>
+using namespace mylib;
 EventLoop *g_loop;
 
 void timeout()
@@ -9,7 +12,7 @@ void timeout()
     g_loop->quit();
 }
 
-int mian()
+int main()
 {
     EventLoop loop;
     g_loop = &loop;

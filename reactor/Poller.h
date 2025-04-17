@@ -30,4 +30,4 @@ namespace mylib
         PollFdList pollfds_;
         ChannelMap channels_;
     };
-}
+};

@@ -3,11 +3,13 @@
 #include "Poller.h"
 #include "Channel.h"
 #include <cstdlib>
+const int kPollTimeMs = 10000;
+
 using namespace mylib;
 __thread EventLoop *t_loopInThisThread = 0;
 EventLoop::EventLoop()
-    : looping_(false), threadId_(mylib::CurrentThread::tid()),
-      poller_(new mylib::Poller(this)), quit_(false)
+    : looping_(false), threadId_(CurrentThread::tid()),
+      poller_(new Poller(this)), quit_(false)
 {
     LOG_TRACE("EventLoop created %p in thread %d", this, threadId_);
     if (t_loopInThisThread)
@@ -57,7 +59,7 @@ void EventLoop::quit()
 {
     quit_ = true;
 }
-void EventLoop::updateChannel(Channe *channel)
+void EventLoop::updateChannel(Channel *channel)
 {
     assert(channel->ownerLoop() == this);
     assertInLoopThread();

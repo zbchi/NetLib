@@ -1,4 +1,9 @@
 #include "Poller.h"
+#include "Channel.h"
+#include <poll.h>
+#include <cassert>
+using namespace mylib;
+
 Poller::Poller(EventLoop *loop) : ownerLoop_(loop) {}
 Poller::~Poller() {}
 
@@ -23,7 +28,7 @@ void Poller::poll(int timeoutMs, ChannelList *activeChannels)
 
 void Poller::fillActiveChannels(int numEvents, ChannelList *activeChannels) const
 {
-    for (PoolFdList::const_iterator pfd = pollfds_.begin(); pfd != pollfds_.end() && numEvents > 0; pfd++)
+    for (PollFdList::const_iterator pfd = pollfds_.begin(); pfd != pollfds_.end() && numEvents > 0; pfd++)
     {
         if (pfd->revents > 0)
         {
