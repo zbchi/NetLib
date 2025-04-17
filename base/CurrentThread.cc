@@ -5,7 +5,8 @@ namespace mylib
 {
     namespace CurrentThread
     {
-        inline pid_t tid()
+        __thread pid_t t_cachedTid = 0;
+        pid_t tid()
         {
             if (t_cachedTid == 0)
             {
@@ -15,7 +16,7 @@ namespace mylib
         }
         pid_t gettid()
         {
-            return static<pid_t>(::syscall(SYS_gettid));
+            return static_cast<pid_t>(::syscall(SYS_gettid));
         }
     }
 }

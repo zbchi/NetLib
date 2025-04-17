@@ -60,6 +60,7 @@ namespace mylib
     };
 
     extern Logger::LogLevel g_logLevel;
+    extern bool showMicroseconds;
 
 #define LOG_TRACE(fmt, ...)                                \
     if (mylib::Logger::logLevel() <= mylib::Logger::TRACE) \
