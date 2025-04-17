@@ -34,10 +34,7 @@ namespace mylib
             }
         }
 
-        bool isInLoopThread() const
-        {
-            return threadId_ == CurrentThread::tid();
-        }
+        bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
         void quit();
         void updateChannel(Channel *channel);
     };
