@@ -5,7 +5,6 @@
 #include <set>
 namespace mylib
 {
-    using TimerCallback = std::function<void()>;
 
     class Timer
     {
@@ -57,6 +56,6 @@ namespace mylib
         EventLoop *loop_;
         const int timerfd_;
         Channel timerfdChannel_;
-        TimerList timers_;
+        TimerList timers_;//  set<   pair<Timestamp,Timer*>   >
     };
 };

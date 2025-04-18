@@ -5,9 +5,12 @@
 #include <vector>
 namespace mylib
 {
+    using TimerCallback = std::function<void()>;
     class Poller;
     class Channel;
-
+    class TimerQueue;
+    class Timestamp;
+    class TimerId;
     class EventLoop
     {
     private:
@@ -20,6 +23,7 @@ namespace mylib
         bool quit_;
 
         std::unique_ptr<Poller> poller_;
+        std::unique_ptr<TimerQueue> timerQueue_;
         ChannelList activeChannels_;
 
     public:
@@ -37,5 +41,9 @@ namespace mylib
         bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
         void quit();
         void updateChannel(Channel *channel);
+
+        TimerId runAt(const Timestamp &time, const TimerCallback &cb);
+        TimerId runAfter(double delay, const TimerCallback &cb);
+        TimerId runEvery(double interval, const TimerCallback &cb);
     };
 };

@@ -1,15 +1,19 @@
 #include "EventLoop.h"
 #include <cassert>
+#include <cstdlib>
+
 #include "Poller.h"
 #include "Channel.h"
-#include <cstdlib>
+#include "TimerQueue.h"
+
 const int kPollTimeMs = 10000;
 
 using namespace mylib;
 __thread EventLoop *t_loopInThisThread = 0;
 EventLoop::EventLoop()
     : looping_(false), threadId_(CurrentThread::tid()),
-      poller_(new Poller(this)), quit_(false)
+      poller_(new Poller(this)), quit_(false),
+      timerQueue_(new TimerQueue(this))
 {
     LOG_TRACE("EventLoop created %p in thread %d", this, threadId_);
     if (t_loopInThisThread)
@@ -64,4 +68,21 @@ void EventLoop::updateChannel(Channel *channel)
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
     poller_->updateChannel(channel);
+}
+
+TimerId EventLoop::runAt(const Timestamp &time, const TimerCallback &cb)
+{
+    return timerQueue_->addTimer(cb, time, 0.0);
+}
+
+TimerId EventLoop::runAfter(double delay, const TimerCallback &cb)
+{
+    Timestamp time(addTime(Timestamp::now(), delay));
+    return runAt(time, cb);
+}
+
+TimerId EventLoop::runEvery(double interval, const TimerCallback &cb)
+{
+    Timestamp time(addTime(Timestamp::now(), interval));
+    return timerQueue_->addTimer(cb, time, interval);
 }
