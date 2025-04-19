@@ -11,7 +11,8 @@ namespace mylib
 {
 
     Logger::LogLevel g_logLevel = Logger::TRACE;
-    bool showMicorseconds = false;
+    bool showMicroseconds = false;
+    bool enableColorLog = true;
 
     static std::mutex g_mutex;
     static Logger::OutputFunc g_output = [](const char *msg, int len)
@@ -43,14 +44,13 @@ namespace mylib
     }
 
     static const char *levelNames[] = {
-        "TRACE",
-        "DEBUG",
-        "INFO",
-        "WARN",
-        "ERROR",
-        "FATAL",
+        mylib::enableColorLog ? "\033[36mTRACE\033[0m" : "TRACE",
+        mylib::enableColorLog ? "\033[34mDEBUG\033[0m" : "DEBUG",
+        mylib::enableColorLog ? "\033[32mINFO\033[0m" : "INFO",
+        mylib::enableColorLog ? "\033[33mWARN\033[0m" : "WARN",
+        mylib::enableColorLog ? "\033[31mERROR\033[0m" : "ERROR",
+        mylib::enableColorLog ? "\033[35mFATAL\033[0m" : "FATAL",
     };
-
     void Logger::log(SourceFile file, int line, LogLevel level, const char *fmt, ...)
     {
         if (level < g_logLevel)
@@ -58,7 +58,7 @@ namespace mylib
 
         std::string time_buf;
         Timestamp timestamp = Timestamp::now();
-        time_buf = timestamp.toFormattedString(showMicorseconds);
+        time_buf = timestamp.toFormattedString(showMicroseconds);
 
         char msg_buf[1024];
         va_list args;
@@ -84,7 +84,7 @@ namespace mylib
 
         std::string time_buf;
         Timestamp timestamp = Timestamp::now();
-        time_buf = timestamp.toFormattedString(showMicorseconds);
+        time_buf = timestamp.toFormattedString(showMicroseconds);
 
         char msg_buf[1024];
         va_list args;
@@ -112,7 +112,7 @@ namespace mylib
 
         std::string time_buf;
         Timestamp timestamp = Timestamp::now();
-        time_buf = timestamp.toFormattedString(showMicorseconds);
+        time_buf = timestamp.toFormattedString(showMicroseconds);
 
         char msg_buf[1024];
         va_list args;
@@ -131,15 +131,9 @@ namespace mylib
             abort();
     }
 
-    Logger::LogLevel Logger::logLevel()
-    {
-        return g_logLevel;
-    }
+    Logger::LogLevel Logger::logLevel() { return g_logLevel; }
 
-    void Logger::setLogLevel(LogLevel level)
-    {
-        g_logLevel = level;
-    }
+    void Logger::setLogLevel(LogLevel level) { g_logLevel = level; }
 
     void Logger::setOutput(OutputFunc output)
     {
