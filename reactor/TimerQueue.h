@@ -1,11 +1,14 @@
+#pragma once
 #include <functional>
 #include "Timestamp.h"
-#include "EventLoop.h"
+
+#include "Channel.h"
 #include <vector>
 #include <set>
 namespace mylib
 {
 
+    using TimerCallback = std::function<void()>;
     class Timer
     {
     private:
@@ -31,7 +34,7 @@ namespace mylib
         Timer *value_;
 
     public:
-        explicit TimerId(Timer *timer) : value_(timer);
+        explicit TimerId(Timer *timer) : value_(timer)
         {
         }
     };
@@ -56,6 +59,6 @@ namespace mylib
         EventLoop *loop_;
         const int timerfd_;
         Channel timerfdChannel_;
-        TimerList timers_;//  set<   pair<Timestamp,Timer*>   >
+        TimerList timers_; //  set<   pair<Timestamp,Timer*>   >
     };
 };

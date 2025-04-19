@@ -7,16 +7,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
-
 namespace mylib
 {
+
+    Logger::LogLevel g_logLevel = Logger::TRACE;
+    bool showMicorseconds = false;
+
     static std::mutex g_mutex;
     static Logger::OutputFunc g_output = [](const char *msg, int len)
     { fwrite(msg, 1, len, stdout); };
     static Logger::FlushFunc g_flush = []()
     { fflush(stdout); };
-    Logger::LogLevel g_logLevel = Logger::TRACE;
-    bool showMicorseconds = false;
 
     __thread char t_errnobuf[512];
     __thread char t_time[32];
@@ -66,7 +67,7 @@ namespace mylib
         va_end(args);
 
         char line_buf[2048];
-        snprintf(line_buf, sizeof(line_buf), "[%s] [%s] %s:%d: %s\n",
+        snprintf(line_buf, sizeof(line_buf), "[%s][%s] %s:%d: %s\n",
                  time_buf.c_str(), levelNames[level], file.data_, line, msg_buf);
 
         std::lock_guard<std::mutex> lock(g_mutex);
@@ -92,7 +93,7 @@ namespace mylib
         va_end(args);
 
         char line_buf[2048];
-        snprintf(line_buf, sizeof(line_buf), "[%s] [%s] %s %s:%d: %s\n",
+        snprintf(line_buf, sizeof(line_buf), "[%s][%s] %s %s:%d: %s\n",
                  time_buf.c_str(), levelNames[level], func, file.data_, line, msg_buf);
 
         std::lock_guard<std::mutex> lock(g_mutex);
@@ -120,7 +121,7 @@ namespace mylib
         va_end(args);
 
         char line_buf[2048];
-        snprintf(line_buf, sizeof(line_buf), "[%s] [%s] %s:%d: %s (errno=%d: %s)\n",
+        snprintf(line_buf, sizeof(line_buf), "[%s][%s] %s:%d: %s (errno=%d: %s)\n",
                  time_buf.c_str(), levelNames[level], file.data_, line, msg_buf, savedErrno, strerror_tl(savedErrno));
 
         std::lock_guard<std::mutex> lock(g_mutex);

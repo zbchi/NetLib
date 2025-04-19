@@ -17,10 +17,11 @@ include_directories(
 # 自动收集源文件
 file(GLOB BASE_SOURCES ${PROJECT_ROOT}/base/*.cc)
 file(GLOB REACTOR_SOURCES 
-${CMAKE_SOURCE_DIR}/test3.cc
+${CMAKE_SOURCE_DIR}/test4.cc
 ${CMAKE_SOURCE_DIR}/EventLoop.cc
 ${CMAKE_SOURCE_DIR}/Channel.cc
 ${CMAKE_SOURCE_DIR}/Poller.cc
+${CMAKE_SOURCE_DIR}/TimerQueue.cc
 )
 
 

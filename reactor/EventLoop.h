@@ -2,7 +2,10 @@
 #include <thread>
 #include "CurrentThread.h"
 #include "Logger.h"
+#include "Timestamp.h"
+#include "TimerQueue.h"
 #include <vector>
+#include <functional>
 namespace mylib
 {
     using TimerCallback = std::function<void()>;
@@ -10,7 +13,6 @@ namespace mylib
     class Channel;
     class TimerQueue;
     class Timestamp;
-    class TimerId;
     class EventLoop
     {
     private:

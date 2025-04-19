@@ -12,7 +12,7 @@ void Poller::poll(int timeoutMs, ChannelList *activeChannels)
     int numEvents = ::poll(&*pollfds_.begin(), pollfds_.size(), timeoutMs);
     if (numEvents > 0)
     {
-        LOG_TRACE("%d events happended");
+        LOG_TRACE("%d events happended", numEvents);
         fillActiveChannels(numEvents, activeChannels);
     }
     else if (numEvents == 0)

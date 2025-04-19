@@ -42,10 +42,20 @@ namespace mylib
         }
         static const int kMicroSecondsPerSecond = 1000 * 1000;
     };
-};
 
-inline Timestamp addTime(Timestamp timestamp, double seconds)
-{
-    int64_t delta = static_cast<int64_t>(seconds * Timestamp::kMicroSecondsPerSecond);
-    return Timestamp(timestamp.microSecondsSinceEpoch() + delta);
-}
+    inline mylib::Timestamp addTime(mylib::Timestamp timestamp, double seconds)
+    {
+        int64_t delta = static_cast<int64_t>(seconds * mylib::Timestamp::kMicroSecondsPerSecond);
+        return mylib::Timestamp(timestamp.microSecondsSinceEpoch() + delta);
+    }
+
+    inline bool operator<(mylib::Timestamp lhs,mylib::Timestamp rhs)
+    {
+        return lhs.microSecondsSinceEpoch() < rhs.microSecondsSinceEpoch();
+    }
+
+    inline bool operator==(mylib::Timestamp lhs, mylib::Timestamp rhs)
+    {
+        return lhs.microSecondsSinceEpoch() == rhs.microSecondsSinceEpoch();
+    }
+};

@@ -4,8 +4,6 @@
 
 #include "Poller.h"
 #include "Channel.h"
-#include "TimerQueue.h"
-
 const int kPollTimeMs = 10000;
 
 using namespace mylib;
@@ -48,7 +46,7 @@ void EventLoop::loop()
         {
             (*it)->handleEvent();
         }
-        LOG_TRACE("EventLoop %p stop looping", this);
+        // LOG_TRACE("EventLoop %p stop looping", this);
         looping_ = false;
     }
 }
