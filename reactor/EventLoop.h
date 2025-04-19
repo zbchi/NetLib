@@ -6,6 +6,7 @@
 #include "TimerQueue.h"
 #include <vector>
 #include <functional>
+#include <mutex>
 namespace mylib
 {
     using TimerCallback = std::function<void()>;
@@ -22,11 +23,21 @@ namespace mylib
         const pid_t threadId_;
 
         using ChannelList = std::vector<Channel *>;
+        using Functor = std::function<void()>;
         bool quit_;
 
         std::unique_ptr<Poller> poller_;
         std::unique_ptr<TimerQueue> timerQueue_;
         ChannelList activeChannels_;
+
+        void handleRead();
+        void doPendingFunctors();
+
+        bool callingPendingFunctors_;
+        int wakeupFd_;
+        std::unique_ptr<Channel> wakeupChannel_;
+        std::mutex mutex_;
+        std::vector<Functor> pendingFunctors_;
 
     public:
         EventLoop();
@@ -47,5 +58,9 @@ namespace mylib
         TimerId runAt(const Timestamp &time, const TimerCallback &cb);
         TimerId runAfter(double delay, const TimerCallback &cb);
         TimerId runEvery(double interval, const TimerCallback &cb);
+
+        void runInLoop(const Functor &cb);
+        void queueInLoop(const Functor &cb);
+        void wakeup();
     };
 };

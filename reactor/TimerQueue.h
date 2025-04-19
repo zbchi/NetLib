@@ -45,6 +45,7 @@ namespace mylib
         TimerQueue(EventLoop *loop);
         ~TimerQueue();
         TimerId addTimer(const TimerCallback &cb, Timestamp when, double interval);
+        void addTimerInLoop(Timer*timer);
 
     private:
         using Entry = std::pair<Timestamp, Timer *>;

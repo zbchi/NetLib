@@ -134,9 +134,13 @@ bool TimerQueue::insert(Timer *timer)
 TimerId TimerQueue::addTimer(const TimerCallback &cb, Timestamp when, double interval)
 {
     Timer *timer = new Timer(cb, when, interval);
-    loop_->assertInLoopThread();
-    bool earliestChanged = insert(timer);
-    if (earliestChanged)
-        resetTimerfd(timerfd_, when);
+
+    loop_->runInLoop([this, timer]()
+                     {
+        loop_->isInLoopThread();
+        bool earliestChanged = insert(timer);
+        if (earliestChanged)
+            resetTimerfd(timerfd_, timer->expiration()); });
+
     return TimerId(timer);
 }
