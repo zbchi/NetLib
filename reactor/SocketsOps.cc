@@ -71,7 +71,18 @@ void sockets::fromHostPort(const char *ip, uint16_t port, struct sockaddr_in *ad
 void sockets::toHostPort(char *buf, size_t size, const struct sockaddr_in &addr)
 {
     char host[INET_ADDRSTRLEN] = "INVALID";
-    ::inet_pton(AF_INET, inet_ntoa(addr.sin_addr), host);
+    ::inet_ntop(AF_INET, &addr.sin_addr, host, sizeof host);
     uint16_t port = sockets::networkToHost16(addr.sin_port);
     snprintf(buf, size, "%s:%u", host, port);
+}
+
+struct sockaddr_in sockets::getLocalAddr(int sockfd)
+{
+    struct sockaddr_in localAddr;
+    socklen_t addrlen = sizeof localAddr;
+    if (::getsockname(sockfd, sockaddr_cast(&localAddr), &addrlen) < 0)
+    {
+        LOG_SYSERR("sockets::getLocalAddr");
+    }
+    return localAddr;
 }

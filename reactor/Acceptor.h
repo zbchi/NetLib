@@ -16,6 +16,7 @@ namespace mylib
 
         void listen();
         void setNewConnectionCallback(const NewConnectionCallback &cb) { newConnectionCallback_ = cb; }
+        bool isListenning() const { return listenning_; }
 
     private:
         EventLoop *loop_;

@@ -17,7 +17,7 @@ include_directories(
 # 自动收集源文件
 file(GLOB BASE_SOURCES ${PROJECT_ROOT}/base/*.cc)
 file(GLOB REACTOR_SOURCES 
-${CMAKE_SOURCE_DIR}/test7.cc
+${CMAKE_SOURCE_DIR}/test8.cc
 ${CMAKE_SOURCE_DIR}/EventLoopThread.cc
 ${CMAKE_SOURCE_DIR}/EventLoop.cc
 ${CMAKE_SOURCE_DIR}/Channel.cc
@@ -29,6 +29,9 @@ ${CMAKE_SOURCE_DIR}/InetAddress.cc
 ${CMAKE_SOURCE_DIR}/SocketsOps.cc
 ${CMAKE_SOURCE_DIR}/Socket.cc
 ${CMAKE_SOURCE_DIR}/Acceptor.cc
+
+${CMAKE_SOURCE_DIR}/TcpServer.cc
+${CMAKE_SOURCE_DIR}/TcpConnection.cc
 )
 
 

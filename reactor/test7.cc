@@ -4,6 +4,7 @@
 #include "SocketsOps.h"
 #include <stdio.h>
 #include <unistd.h>
+#include <thread>
 using namespace mylib;
 void newConnection(int sockfd, const InetAddress &peerAddr)
 {
@@ -15,6 +16,15 @@ void newConnection(int sockfd, const InetAddress &peerAddr)
 
 int main()
 {
+
+    std::thread t1([]()
+                   { InetAddress listenAddr(8080); 
+                    EventLoop loop;
+                    Acceptor acceptor(&loop,listenAddr);
+                    acceptor.setNewConnectionCallback(newConnection);
+                    acceptor.listen();
+                    loop.loop(); });
+
     printf("main(): pid = %d\n", getpid());
 
     InetAddress listenAddr(9981);
