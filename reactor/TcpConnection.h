@@ -7,6 +7,7 @@ namespace mylib
     class TcpConnection;
     using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
     using ConnectionCallback = std::function<void(const TcpConnectionPtr &)>;
+    using CloseCallback = std::function<void(const TcpConnectionPtr &)>;
     using MessageCallback = std::function<void(const TcpConnectionPtr &,
                                                const char *data,
                                                ssize_t len)>;
@@ -38,16 +39,25 @@ namespace mylib
         {
             messageCallback_ = cb;
         }
+        void setCloseCallback(const CloseCallback &cb)
+        {
+            closeCallback_ = cb;
+        }
+        void connectDestroyed();
 
     private:
         enum StateE
         {
             kConnecting,
             kConnected,
+            kDisconnected,
         };
         void setState(StateE s) { state_ = s; }
 
         void handleRead();
+        void handleWrite();
+        void handleClose();
+        void handleError();
 
         EventLoop *loop_;
         std::string name_;
@@ -61,5 +71,6 @@ namespace mylib
 
         MessageCallback messageCallback_;
         ConnectionCallback connectionCallback_;
+        CloseCallback closeCallback_;
     };
 };

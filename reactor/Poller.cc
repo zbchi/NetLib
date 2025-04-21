@@ -46,7 +46,7 @@ void Poller::fillActiveChannels(int numEvents, ChannelList *activeChannels) cons
 void Poller::updateChannel(Channel *channel)
 {
     assertInLoopThread();
-    LOG_TRACE("fd=%d events=%d", channel->fd(), channel->events());
+    LOG_TRACE("fd = %d events = %d", channel->fd(), channel->events());
     if (channel->index() < 0)
     {
         assert(channels_.find(channel->fd()) == channels_.end());
@@ -73,5 +73,35 @@ void Poller::updateChannel(Channel *channel)
         {
             pfd.fd = -1;
         }
+    }
+}
+
+void Poller::removeChannel(Channel *channel)
+{
+    assertInLoopThread();
+    LOG_TRACE("fd = %d", channel->fd());
+    assert(channels_.find(channel->fd()) != channels_.end());
+    assert(channels_[channel->fd()] == channel);
+    assert(channel->isNoneEvent());
+    int idx = channel->index();
+    assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
+
+    const struct pollfd &pfd = pollfds_[idx];
+    channels_.erase(channel->fd());
+
+    if (static_cast<size_t>(idx) == pollfds_.size() - 1)
+    {
+        pollfds_.pop_back();
+    }
+    else
+    {
+        int channelAtEnd = pollfds_.back().fd;
+        iter_swap(pollfds_.begin() + idx, pollfds_.end() - 1);
+        if (channelAtEnd < 0)
+        {
+            channelAtEnd = -channelAtEnd - 1;
+        }
+        channels_[channelAtEnd]->set_index(idx);
+        pollfds_.pop_back();
     }
 }

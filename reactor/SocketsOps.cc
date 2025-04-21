@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include <unistd.h>
 #include <cstdio>
+#include <cerrno>
 using namespace mylib;
 
 using SA = struct sockaddr;
@@ -85,4 +86,16 @@ struct sockaddr_in sockets::getLocalAddr(int sockfd)
         LOG_SYSERR("sockets::getLocalAddr");
     }
     return localAddr;
+}
+
+int sockets::getSocketError(int sockfd)
+{
+    int optval;
+    socklen_t optlen = sizeof optval;
+    if (::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) < 0)
+    {
+        return errno;
+    }
+    else
+        return optval;
 }

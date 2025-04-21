@@ -15,6 +15,7 @@ namespace mylib
 
         void poll(int timeoutMs, ChannelList *activeChannels);
         void updateChannel(Channel *channel);
+        void removeChannel(Channel *channel);
         void assertInLoopThread()
         {
             ownerLoop_->assertInLoopThread();

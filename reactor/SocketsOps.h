@@ -46,5 +46,6 @@ namespace mylib
         void close(int sockfd);
 
         struct sockaddr_in getLocalAddr(int sockfd);
+        int getSocketError(int sockfd);
     }
 };

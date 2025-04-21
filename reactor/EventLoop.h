@@ -54,6 +54,7 @@ namespace mylib
         bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
         void quit();
         void updateChannel(Channel *channel);
+        void removeChannel(Channel *channel);
 
         TimerId runAt(const Timestamp &time, const TimerCallback &cb);
         TimerId runAfter(double delay, const TimerCallback &cb);
