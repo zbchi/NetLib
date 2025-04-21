@@ -65,6 +65,7 @@ namespace mylib
         va_start(args, fmt);
         vsnprintf(msg_buf, sizeof(msg_buf), fmt, args);
         va_end(args);
+        
 
         char line_buf[2048];
         snprintf(line_buf, sizeof(line_buf), "[%s][%s] %s:%d: %s\n",

@@ -11,7 +11,7 @@ namespace mylib
     if (mylib::Logger::logLevel() <= mylib::Logger::DEBUG) \
     mylib::Logger::log(mylib::Logger::SourceFile(__FILE__), __LINE__, mylib::Logger::DEBUG, __func__, fmt, ##__VA_ARGS__)
 #define LOG_INFO(fmt, ...) \
-    mylib::Logger::log(mylib::Logger::SourceFile(__FILE__), __LINE__, mylib::Logger::INFO, fmt, ##__VA_ARGS__)
+    mylib::Logger::log(mylib::Logger::SourceFile(__FILE__), __LINE__, mylib::Logger::INFO, __func__, fmt, ##__VA_ARGS__)
 #define LOG_WARN(fmt, ...) \
     mylib::Logger::log(mylib::Logger::SourceFile(__FILE__), __LINE__, mylib::Logger::WARN, fmt, ##__VA_ARGS__)
 #define LOG_ERROR(fmt, ...) \
