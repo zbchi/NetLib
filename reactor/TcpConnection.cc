@@ -23,8 +23,8 @@ TcpConnection::TcpConnection(EventLoop *loop,
 {
     LOG_DEBUG("TcpConnection::ctor[%s] at %p fd=%d",
               name_.c_str(), this, sockfd);
-    channel_->setReadCallback([this]()
-                              { handleRead(); });
+    channel_->setReadCallback([this](Timestamp receiveTime)
+                              { handleRead(receiveTime); });
 }
 
 void TcpConnection::connectEstablished()
@@ -34,16 +34,20 @@ void TcpConnection::connectEstablished()
     connectionCallback_(shared_from_this());
 }
 
-void TcpConnection::handleRead()
+void TcpConnection::handleRead(Timestamp receiveTime)
 {
-    char buf[65536];
-    ssize_t n = ::read(channel_->fd(), buf, sizeof buf);
+    int savedErrno = 0;
+    ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
     if (n > 0)
-        messageCallback_(shared_from_this(), buf, n);
+        messageCallback_(shared_from_this(), &inputBuffer_, receiveTime);
     else if (n == 0)
         handleClose();
     else
+    {
+        errno = savedErrno;
+        LOG_SYSERR("TcpConnection::handleRead");
         handleError();
+    }
 }
 
 void TcpConnection::handleClose()

@@ -7,9 +7,10 @@ using namespace mylib;
 Poller::Poller(EventLoop *loop) : ownerLoop_(loop) {}
 Poller::~Poller() {}
 
-void Poller::poll(int timeoutMs, ChannelList *activeChannels)
+Timestamp Poller::poll(int timeoutMs, ChannelList *activeChannels)
 {
     int numEvents = ::poll(&*pollfds_.begin(), pollfds_.size(), timeoutMs);
+    Timestamp now(Timestamp::now());
     if (numEvents > 0)
     {
         LOG_TRACE("%d events happended", numEvents);
@@ -23,7 +24,7 @@ void Poller::poll(int timeoutMs, ChannelList *activeChannels)
     {
         LOG_SYSERR("Poller::poll()");
     }
-    return;
+    return now;
 }
 
 void Poller::fillActiveChannels(int numEvents, ChannelList *activeChannels) const

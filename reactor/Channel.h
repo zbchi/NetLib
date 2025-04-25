@@ -8,10 +8,10 @@ namespace mylib
     {
 
     public:
-        using EventCallBack = std::function<void()>;
+        using EventCallBack = std::function<void(Timestamp)>;
         Channel(EventLoop *loop, int fdArg);
         ~Channel();
-        void handleEvent();
+        void handleEvent(Timestamp receiveTime);
         void setReadCallback(const EventCallBack &cb) { readCallback_ = cb; }
         void setWriteCallback(const EventCallBack &cb) { writeCallback_ = cb; }
         void setErrorCallback(const EventCallBack &cb) { errorCallback_ = cb; }

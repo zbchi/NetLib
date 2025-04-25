@@ -21,6 +21,7 @@ namespace mylib
 
         bool looping_;
         const pid_t threadId_;
+        Timestamp pollReturnTime_;
 
         using ChannelList = std::vector<Channel *>;
         using Functor = std::function<void()>;

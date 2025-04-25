@@ -13,7 +13,7 @@ namespace mylib
         Poller(EventLoop *loop);
         ~Poller();
 
-        void poll(int timeoutMs, ChannelList *activeChannels);
+        Timestamp poll(int timeoutMs, ChannelList *activeChannels);
         void updateChannel(Channel *channel);
         void removeChannel(Channel *channel);
         void assertInLoopThread()

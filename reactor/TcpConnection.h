@@ -1,16 +1,17 @@
 #include "InetAddress.h"
-
+#include "Buffer.h"
 #include <memory>
 #include <functional>
 namespace mylib
 {
     class TcpConnection;
+    class Timestamp;
     using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
     using ConnectionCallback = std::function<void(const TcpConnectionPtr &)>;
     using CloseCallback = std::function<void(const TcpConnectionPtr &)>;
     using MessageCallback = std::function<void(const TcpConnectionPtr &,
-                                               const char *data,
-                                               ssize_t len)>;
+                                               Buffer *buf,
+                                               Timestamp)>;
     class EventLoop;
     class Socket;
     class Channel;
@@ -54,7 +55,7 @@ namespace mylib
         };
         void setState(StateE s) { state_ = s; }
 
-        void handleRead();
+        void handleRead(Timestamp receiveTime);
         void handleWrite();
         void handleClose();
         void handleError();
@@ -72,5 +73,7 @@ namespace mylib
         MessageCallback messageCallback_;
         ConnectionCallback connectionCallback_;
         CloseCallback closeCallback_;
+
+        Buffer inputBuffer_;
     };
 };
