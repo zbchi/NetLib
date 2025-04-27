@@ -69,6 +69,12 @@ void TcpConnection::handleWrite()
             if (outputBuffer_.readableBytes() == 0)
             {
                 channel_->disableWriting();
+                if (writeCompleteCallback_)
+                {
+                    auto self = shared_from_this();
+                    loop_->queueInLoop([self]()
+                                       { self->writeCompleteCallback_(); })
+                }
                 if (state_ = kDisconnecting)
                 {
                     shutdownInLoop();
@@ -132,6 +138,12 @@ void TcpConnection::sendInLoop(const std::string &message)
             {
                 LOG_TRACE("I am going to write more data");
             }
+            else if (writeCompleteCallback_)
+            {
+                auto self = shared_from_this();
+                loop_->queueInLoop([self]()
+                                   { self->writeCompleteCallback_(); });
+            }
         }
         else
         {
@@ -178,4 +190,9 @@ void TcpConnection::connectDestroyed()
     channel_->disableAll();
     connectionCallback_(shared_from_this());
     loop_->removeChannel(channel_.get());
+}
+
+void TcpConnection::setTcpNodelay(bool on)
+{
+    socket_->setTcpNodelay(on);
 }

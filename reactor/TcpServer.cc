@@ -5,6 +5,7 @@
 #include "Acceptor.h"
 #include "EventLoop.h"
 #include "SocketsOps.h"
+#include "EventLoopThreadPool.h"
 using namespace mylib;
 
 TcpServer::TcpServer(EventLoop *loop, const InetAddress &listenAddr)
@@ -47,6 +48,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peerAddr)
     connections_[connName] = conn;
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
+    conn->setWriteCompleteCallback(writeCompleteCallback_);
     conn->setCloseCallback([this](const TcpConnectionPtr &conn)
                            { removeConnection(conn); });
     conn->connectEstablished();

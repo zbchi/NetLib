@@ -13,6 +13,7 @@ namespace mylib
         void listen();
         int accept(InetAddress *peeraddr);
 
+        void setTcpNodelay(bool on);s
         void setReuseAddr(bool on);
         void shutdownWrite();
         explicit Socket(int sockfd) : sockfd_(sockfd) {}

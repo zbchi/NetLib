@@ -12,6 +12,7 @@ namespace mylib
     using MessageCallback = std::function<void(const TcpConnectionPtr &,
                                                Buffer *buf,
                                                Timestamp)>;
+    using WriteCompleteCallback = std::function<void(const TcpConnectionPtr &)>;
     class EventLoop;
     class Socket;
     class Channel;
@@ -30,7 +31,7 @@ namespace mylib
         const InetAddress &localAddress() { return localAddr_; }
         const InetAddress &peerAddress() { return peerAddr_; }
 
-        void connectEstablished();
+        void connectEstablished();conn->setWriteCompleteCallback(writeCompleteCallback_);
 
         void setConnectionCallback(const ConnectionCallback &cb)
         {
@@ -44,9 +45,14 @@ namespace mylib
         {
             closeCallback_ = cb;
         }
+        void setWriteCompleteCallback(const WriteCompleteCallback &cb)
+        {
+            writeCompleteCallback_ = cb;
+        }
         void connectDestroyed();
         void shutdown();
         void send(const std::string &message);
+        void setTcpNodelay(bool on);
 
     private:
         enum StateE
@@ -78,6 +84,7 @@ namespace mylib
         MessageCallback messageCallback_;
         ConnectionCallback connectionCallback_;
         CloseCallback closeCallback_;
+        WriteCompleteCallback writeCompleteCallback_;
 
         Buffer inputBuffer_;
         Buffer outputBuffer_;
