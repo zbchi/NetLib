@@ -14,7 +14,7 @@ namespace mylib
         int accept(InetAddress *peeraddr);
 
         void setReuseAddr(bool on);
-
+        void shutdownWrite();
         explicit Socket(int sockfd) : sockfd_(sockfd) {}
         ~Socket();
     };

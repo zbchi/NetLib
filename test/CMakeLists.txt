@@ -14,10 +14,9 @@ include_directories(
 )
 
 
-# 自动收集源文件
 file(GLOB BASE_SOURCES ${PROJECT_ROOT}/base/*.cc )
 file(GLOB REACTOR_SOURCES ${PROJECT_ROOT}/reactor/*.cc)
-file(GLOB TEST_SOURCES ${CMAKE_SOURCE_DIR}/test8.cc)
+file(GLOB TEST_SOURCES ${CMAKE_SOURCE_DIR}/test10.cc)
 
 add_executable(test ${BASE_SOURCES} ${REACTOR_SOURCES} ${TEST_SOURCES})
 target_link_libraries(test PRIVATE pthread)

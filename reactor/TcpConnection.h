@@ -45,12 +45,15 @@ namespace mylib
             closeCallback_ = cb;
         }
         void connectDestroyed();
+        void shutdown();
+        void send(const std::string &message);
 
     private:
         enum StateE
         {
             kConnecting,
             kConnected,
+            kDisconnecting,
             kDisconnected,
         };
         void setState(StateE s) { state_ = s; }
@@ -59,6 +62,8 @@ namespace mylib
         void handleWrite();
         void handleClose();
         void handleError();
+        void sendInLoop(const std::string &message);
+        void shutdownInLoop();
 
         EventLoop *loop_;
         std::string name_;
@@ -75,5 +80,6 @@ namespace mylib
         CloseCallback closeCallback_;
 
         Buffer inputBuffer_;
+        Buffer outputBuffer_;
     };
 };

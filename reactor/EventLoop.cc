@@ -3,10 +3,20 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/eventfd.h>
-
+#include <signal.h>
 #include "Poller.h"
 #include "Channel.h"
 const int kPollTimeMs = 10000;
+
+class IngnoreSigPipe
+{
+public:
+    IngnoreSigPipe()
+    {
+        ::signal(SIGPIPE, SIG_IGN);
+    }
+};
+IngnoreSigPipe initObj;
 
 using namespace mylib;
 __thread EventLoop *t_loopInThisThread = 0;

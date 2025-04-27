@@ -16,6 +16,7 @@ namespace mylib
         void handleEvent(Timestamp receiveTime);
         void setReadCallback(const ReadEventCallBack &cb) { readCallback_ = cb; }
         void setWriteCallback(const EventCallBack &cb) { writeCallback_ = cb; }
+        void setCloseCallback(const EventCallBack &cb) { closeCallback_ = cb; }
         void setErrorCallback(const EventCallBack &cb) { errorCallback_ = cb; }
 
         int fd() const { return fd_; }
@@ -27,10 +28,24 @@ namespace mylib
             events_ |= kReadEvent;
             update();
         }
+        void enableWriting()
+        {
+            events_ |= kWriteEvent;
+            update();
+        }
+        void disableWriting()
+        {
+            events_ &= ~kWriteEvent;
+            update();
+        }
         void disableAll()
         {
             events_ = kNoneEvent;
             update();
+        }
+        bool isWriting() const
+        {
+            return events_ & kWriteEvent;
         }
 
         int index() { return index_; }

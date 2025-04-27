@@ -15,7 +15,6 @@ ssize_t Buffer::readFd(int fd, int *savedErrno)
     vec[1].iov_len = sizeof extrabuf;
 
     const ssize_t n = readv(fd, vec, 2);
-    std::cout << vec->iov_base << std::endl;
     if (n < 0)
     {
         *savedErrno = errno;

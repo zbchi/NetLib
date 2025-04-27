@@ -10,7 +10,7 @@
 namespace mylib
 {
 
-    Logger::LogLevel g_logLevel = Logger::TRACE;
+    Logger::LogLevel g_logLevel = Logger::INFO;
     bool showMicroseconds = false;
     bool enableColorLog = true;
 
@@ -65,7 +65,6 @@ namespace mylib
         va_start(args, fmt);
         vsnprintf(msg_buf, sizeof(msg_buf), fmt, args);
         va_end(args);
-        
 
         char line_buf[2048];
         snprintf(line_buf, sizeof(line_buf), "[%s][%s] %s:%d: %s\n",
