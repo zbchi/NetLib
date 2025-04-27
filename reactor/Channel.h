@@ -4,15 +4,17 @@
 namespace mylib
 {
     class EventLoop;
+    class Timestamp;
     class Channel
     {
 
     public:
-        using EventCallBack = std::function<void(Timestamp)>;
+        using ReadEventCallBack = std::function<void(Timestamp)>;
+        using EventCallBack = std::function<void()>;
         Channel(EventLoop *loop, int fdArg);
         ~Channel();
         void handleEvent(Timestamp receiveTime);
-        void setReadCallback(const EventCallBack &cb) { readCallback_ = cb; }
+        void setReadCallback(const ReadEventCallBack &cb) { readCallback_ = cb; }
         void setWriteCallback(const EventCallBack &cb) { writeCallback_ = cb; }
         void setErrorCallback(const EventCallBack &cb) { errorCallback_ = cb; }
 
@@ -39,7 +41,7 @@ namespace mylib
     private:
         void update();
 
-        EventCallBack readCallback_;
+        ReadEventCallBack readCallback_;
         EventCallBack writeCallback_;
         EventCallBack errorCallback_;
         EventCallBack closeCallback_;

@@ -65,7 +65,7 @@ void readTimerfd(int timerfd, Timestamp now)
 TimerQueue::TimerQueue(EventLoop *loop)
     : loop_(loop), timerfd_(createTimerfd()), timerfdChannel_(loop, timerfd_)
 {
-    timerfdChannel_.setReadCallback([this]()
+    timerfdChannel_.setReadCallback([this](Timestamp)
                                     { handleRead(); });
     timerfdChannel_.enableReading();
 }

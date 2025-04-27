@@ -41,7 +41,7 @@ EventLoop::EventLoop()
         t_loopInThisThread = this;
     }
 
-    wakeupChannel_->setReadCallback([this]()
+    wakeupChannel_->setReadCallback([this](Timestamp)
                                     { handleRead(); });
     wakeupChannel_->enableReading();
 }
@@ -62,7 +62,7 @@ void EventLoop::loop()
     while (!quit_)
     {
         activeChannels_.clear();
-        pollReturnTime_ =->poll(kPollTimeMs, &activeChannels_);
+        pollReturnTime_ = poller_->poll(kPollTimeMs, &activeChannels_);
         for (ChannelList::iterator it = activeChannels_.begin();
              it != activeChannels_.end(); it++)
         {
