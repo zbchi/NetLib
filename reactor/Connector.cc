@@ -22,6 +22,15 @@ void Connector::start()
     loop_->runInLoop([this]()
                      { startInLoop(); });
 }
+void Connector::restart()
+{
+    loop_->assertInLoopThread();
+    setState(kDisconnected);
+    retryDelayMs_ = kInitRetryDelayMs;
+    connect_ = true;
+    startInLoop();
+}
+
 void Connector::startInLoop()
 {
     loop_->assertInLoopThread();

@@ -17,8 +17,9 @@ namespace mylib
             newConnectionCallback_ = cb;
         }
         void start();
-        void startInLoop();
+        void restart();
         void stop();
+        const InetAddress &serverAddress() const { return serverAddr_; }
 
     private:
         enum States
@@ -40,6 +41,7 @@ namespace mylib
 
         NewConnectionCallback newConnectionCallback_;
         TimerId timerId_;
+        void startInLoop();
         void connect();
         void connecting(int sockfd);
         void handleWrite();

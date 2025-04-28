@@ -7,7 +7,7 @@ EventLoop *g_loop;
 void connectionCallback(int sockfd)
 {
     printf("connected.\n");
-    g_loop->quit();
+    // g_loop->quit();
 }
 int main(int argc, char *argv[])
 {
