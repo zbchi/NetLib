@@ -81,6 +81,7 @@ namespace mylib
     extern Logger::LogLevel g_logLevel;
     extern bool showMicroseconds;
     extern bool enableColorLog;
+    const char *strerror_tl(int savedErrno);
 
 };
 

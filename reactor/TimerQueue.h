@@ -31,12 +31,16 @@ namespace mylib
     class TimerId
     {
     private:
-        Timer *value_;
+        Timer *timer_;
+        int64_t sequence_;
 
     public:
-        explicit TimerId(Timer *timer) : value_(timer)
+        explicit TimerId(Timer *timer = NULL, int64_t seq = 0)
+            : timer_(timer),
+              sequence_(seq)
         {
         }
+        friend class TimerQueue;
     };
 
     class TimerQueue
@@ -45,7 +49,7 @@ namespace mylib
         TimerQueue(EventLoop *loop);
         ~TimerQueue();
         TimerId addTimer(const TimerCallback &cb, Timestamp when, double interval);
-        void addTimerInLoop(Timer*timer);
+        void addTimerInLoop(Timer *timer);
 
     private:
         using Entry = std::pair<Timestamp, Timer *>;
