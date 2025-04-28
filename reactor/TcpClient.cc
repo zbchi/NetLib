@@ -2,6 +2,7 @@
 #include "Connector.h"
 #include "EventLoop.h"
 #include "SocketsOps.h"
+#include <string>
 using namespace mylib;
 TcpClient::TcpClient(EventLoop *loop, const InetAddress &serverAddr)
     : loop_(loop),
@@ -22,7 +23,7 @@ void TcpClient::newConnection(int sockfd)
     char buf[32];
     snprintf(buf, sizeof buf, ":%s#%d", peerAddr.toHostPort().c_str(), nextConnId_);
     ++nextConnId_;
-    string connName = buf;
+    std::string connName = buf;
 
     InetAddress localAddr(sockets::getLocalAddr(sockfd));
     TcpConnectionPtr conn(new TcpConnection(loop_, connName,
@@ -58,8 +59,8 @@ void TcpClient::removeConnection(const TcpConnectionPtr &conn)
 
 void TcpClient::connect()
 {
-    LOGINFO("TcpClient::connect[%p] - connecting to %s",
-            this, connector_->serverAddress().toHostPort().c_str());
+    LOG_INFO("TcpClient::connect[%p] - connecting to %s",
+             this, connector_->serverAddress().toHostPort().c_str());
     connect_ = true;
     connector_->start();
 }

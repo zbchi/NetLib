@@ -1,6 +1,7 @@
 #include "Connector.h"
 #include "EventLoop.h"
 #include <stdio.h>
+#include "TcpClient.h"
 using namespace mylib;
 EventLoop *g_loop;
 

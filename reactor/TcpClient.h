@@ -33,5 +33,5 @@ namespace mylib
         void connect();
         void disconnect();
         void stop();
-    }
+    };
 }

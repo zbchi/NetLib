@@ -115,6 +115,12 @@ void Connector::retry(int sockfd)
     }
 }
 
+void Connector::stop()
+{
+    connect_ = false;
+    // loop->cancle(timerId_);
+}
+
 void Connector::handleWrite()
 {
     LOG_TRACE("Connector::handleWrite %d", state_);

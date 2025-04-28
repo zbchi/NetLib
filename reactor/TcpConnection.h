@@ -1,5 +1,6 @@
 #include "InetAddress.h"
 #include "Buffer.h"
+#include "Socket.h"
 #include <memory>
 #include <functional>
 namespace mylib
