@@ -73,7 +73,7 @@ void TcpConnection::handleWrite()
                 {
                     auto self = shared_from_this();
                     loop_->queueInLoop([self]()
-                                       { self->writeCompleteCallback_(); })
+                                       { self->writeCompleteCallback_(self); });
                 }
                 if (state_ = kDisconnecting)
                 {
@@ -142,7 +142,7 @@ void TcpConnection::sendInLoop(const std::string &message)
             {
                 auto self = shared_from_this();
                 loop_->queueInLoop([self]()
-                                   { self->writeCompleteCallback_(); });
+                                   { self->writeCompleteCallback_(self); });
             }
         }
         else

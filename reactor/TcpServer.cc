@@ -12,6 +12,7 @@ TcpServer::TcpServer(EventLoop *loop, const InetAddress &listenAddr)
     : loop_(loop),
       name_(listenAddr.toHostPort()),
       acceptor_(new Acceptor(loop, listenAddr)),
+      threadPool_(new EventLoopThreadPool(loop)),
       started_(false),
       nextConnId_(1)
 {
@@ -24,7 +25,10 @@ TcpServer::~TcpServer() {}
 void TcpServer::start()
 {
     if (!started_)
+    {
         started_ = true;
+        threadPool_->start();
+    }
     if (!acceptor_->isListenning())
     {
         loop_->runInLoop([this]()
@@ -43,22 +47,36 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peerAddr)
              name_.c_str(), connName.c_str(), peerAddr.toHostPort().c_str());
 
     InetAddress localAddr(sockets::getLocalAddr(sockfd));
+    EventLoop *ioLoop = threadPool_->getNextLoop();
     TcpConnectionPtr conn(
-        new TcpConnection(loop_, connName, sockfd, localAddr, peerAddr));
+        new TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr));
     connections_[connName] = conn;
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
     conn->setWriteCompleteCallback(writeCompleteCallback_);
     conn->setCloseCallback([this](const TcpConnectionPtr &conn)
                            { removeConnection(conn); });
-    conn->connectEstablished();
+    ioLoop->runInLoop([conn]()
+                      { conn->connectEstablished(); });
 }
 
 void TcpServer::removeConnection(const TcpConnectionPtr &conn)
 {
-    LOG_INFO("TcpServer::removeConnection [%s] - connection %s",
-             name_.c_str(), conn->name().c_str());
+    loop_->runInLoop([this, conn]()
+                     { removeConnectionInLoop(conn); });
+}
+
+void TcpServer::removeConnectionInLoop(const TcpConnectionPtr &conn)
+{
+    loop_->assertInLoopThread();
+    LOG_INFO("TcpServer::removeConnectionInLoop [%s] - connection", conn->name().c_str());
     connections_.erase(conn->name());
-    loop_->runInLoop([conn]()
-                     { conn->connectDestroyed(); });
+    EventLoop *ioLoop = conn->getLoop();
+    ioLoop->queueInLoop([conn]()
+                        { conn->connectDestroyed(); });
+}
+
+void TcpServer::setThreadNum(int numThreads)
+{
+    threadPool_->setThreadNum(numThreads);
 }

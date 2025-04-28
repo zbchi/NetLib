@@ -1,14 +1,25 @@
 #include "EventLoopThreadPool.h"
 using namespace mylib;
+EventLoopThreadPool::EventLoopThreadPool(EventLoop *baseLoop)
+    : baseLoop_(baseLoop),
+      started_(false),
+      numThreads_(0),
+      next_(0)
+{
+}
+EventLoopThreadPool::~EventLoopThreadPool()
+{
+}
 void EventLoopThreadPool::start()
 {
     baseLoop_->assertInLoopThread();
     started_ = true;
     for (int i = 0; i < numThreads_; i++)
     {
-        EventLoopThread *t = new EventLoopThread;
-        threads_.push_back(t);
-        loops_.push_back(t->startLoop())
+        auto t = std::make_unique<EventLoopThread>();
+        EventLoop *loop = t->startLoop();
+        loops_.push_back(loop);
+        threads_.push_back(std::move(t));
     }
 }
 

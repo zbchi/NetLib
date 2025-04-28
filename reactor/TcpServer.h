@@ -23,6 +23,8 @@ namespace mylib
         void removeConnection(const TcpConnectionPtr &conn);
         void removeConnectionInLoop(const TcpConnectionPtr &conn);
 
+        void setThreadNum(int numThreads);
+
     private:
         using ConnectionMap = std::map<std::string, TcpConnectionPtr>;
         void newConnection(int sockfd, const InetAddress &peerAddr);

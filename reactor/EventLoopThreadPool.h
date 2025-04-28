@@ -9,7 +9,7 @@ namespace mylib
         bool started_;
         int numThreads_;
         int next_;
-        std::vector<std::unique_ptr<EventLoopoThread>> threads_;
+        std::vector<std::unique_ptr<EventLoopThread>> threads_;
         std::vector<EventLoop *> loops_;
 
     public:

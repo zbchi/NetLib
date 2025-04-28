@@ -26,12 +26,13 @@ namespace mylib
                       const InetAddress &localAddr,
                       const InetAddress &peerAddr);
 
+        EventLoop *getLoop() const { return loop_; }
         bool connected() { return state_ == kConnected; }
         const std::string &name() const { return name_; }
         const InetAddress &localAddress() { return localAddr_; }
         const InetAddress &peerAddress() { return peerAddr_; }
 
-        void connectEstablished();conn->setWriteCompleteCallback(writeCompleteCallback_);
+        void connectEstablished();
 
         void setConnectionCallback(const ConnectionCallback &cb)
         {

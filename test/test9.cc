@@ -29,14 +29,17 @@ void onMessage(const TcpConnectionPtr &conn,
            receiveTime.toFormattedString().c_str());
     conn->send(buf->retrieveAsString());
 }
-int main()
+int main(int argc, char *argv[])
 {
     InetAddress listenAddr(9981);
     EventLoop loop;
     TcpServer server(&loop, listenAddr);
     server.setConnectionCallback(onConnection);
     server.setMessageCallback(onMessage);
+    if (argc > 1)
+    {
+        server.setThreadNum(atoi(argv[1]));
+    }
     server.start();
     loop.loop();
 }
-

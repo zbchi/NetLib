@@ -28,7 +28,7 @@ void onMessage(const TcpConnectionPtr &conn, Buffer *buf, Timestamp receiveTime)
     printf("onMessage(): [%s]\n", buf->retrieveAsString().c_str());
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     InetAddress listenAddr(9981);
     EventLoop loop;
@@ -36,6 +36,8 @@ int main()
     TcpServer server(&loop, listenAddr);
     server.setConnectionCallback(onConnection);
     server.setMessageCallback(onMessage);
+    if (argc > 1)
+        server.setThreadNum(atoi(argv[1]));
     server.start();
 
     loop.loop();

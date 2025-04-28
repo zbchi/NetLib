@@ -1,6 +1,7 @@
 #include "Socket.h"
 #include "SocketsOps.h"
 #include "InetAddress.h"
+#include <netinet/tcp.h>
 using namespace mylib;
 
 Socket::~Socket() {}
@@ -41,5 +42,5 @@ void Socket::setTcpNodelay(bool on)
 {
     int optval = on ? 1 : 0;
     ::setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY,
-                 &optval, sizeof optval); 
+                 &optval, sizeof optval);
 }
