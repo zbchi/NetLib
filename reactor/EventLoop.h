@@ -10,7 +10,7 @@
 namespace mylib
 {
     using TimerCallback = std::function<void()>;
-    class Poller;
+    class Epoller;
     class Channel;
     class TimerQueue;
     class Timestamp;
@@ -27,7 +27,7 @@ namespace mylib
         using Functor = std::function<void()>;
         bool quit_;
 
-        std::unique_ptr<Poller> poller_;
+        std::unique_ptr<Epoller> poller_;
         std::unique_ptr<TimerQueue> timerQueue_;
         ChannelList activeChannels_;
 

@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/eventfd.h>
 #include <signal.h>
-#include "Poller.h"
+#include "Epoller.h"
 #include "Channel.h"
 const int kPollTimeMs = 10000;
 
@@ -35,7 +35,8 @@ static int createEventfd()
 EventLoop::EventLoop()
     : looping_(false),
       threadId_(CurrentThread::tid()),
-      poller_(new Poller(this)), quit_(false),
+      poller_(new Epoller(this)),
+      quit_(false),
       timerQueue_(new TimerQueue(this)),
       wakeupFd_(createEventfd()),
       wakeupChannel_(new Channel(this, wakeupFd_))

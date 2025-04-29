@@ -15,7 +15,7 @@ TcpClient::TcpClient(EventLoop *loop, const InetAddress &serverAddr)
                                          { newConnection(sockfd); });
     LOG_INFO("TcpClient::TcpClient[%p] - connector %p", this, connector_.get());
 }
-
+TcpClient::~TcpClient() {}
 void TcpClient::newConnection(int sockfd)
 {
     loop_->assertInLoopThread();

@@ -16,7 +16,7 @@ include_directories(
 
 file(GLOB BASE_SOURCES ${PROJECT_ROOT}/base/*.cc )
 file(GLOB REACTOR_SOURCES ${PROJECT_ROOT}/reactor/*.cc)
-file(GLOB TEST_SOURCES ${CMAKE_SOURCE_DIR}/test12.cc)
+file(GLOB TEST_SOURCES ${CMAKE_SOURCE_DIR}/test10.cc)
 
 add_executable(test ${BASE_SOURCES} ${REACTOR_SOURCES} ${TEST_SOURCES})
 target_link_libraries(test PRIVATE pthread)
