@@ -34,7 +34,7 @@ void onMessage(const TcpConnectionPtr &conn, Buffer *buf, Timestamp receiveTime)
 int main()
 {
     EventLoop loop;
-    InetAddress serverAddr("localhost", 9981);
+    InetAddress serverAddr("localhost", 8000);
     TcpClient client(&loop, serverAddr);
 
     client.setConnectionCallback(onConnection);
